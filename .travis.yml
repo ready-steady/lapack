@@ -7,7 +7,7 @@ install:
   - go get -d -t ./...
   - git submodule update --init
   - make install
-  - make test
+  - go test -v
 
 notifications:
   email:
