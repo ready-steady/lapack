@@ -6,8 +6,8 @@ before_install:
 install:
   - go get -d -t ./...
   - git submodule update --init
-  - (cd lapack && make install)
-  - go build -v ./...
+  - make install
+  - make test
 
 notifications:
   email:
