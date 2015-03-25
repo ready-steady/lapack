@@ -18,8 +18,11 @@ $(build)/librefblas.a: $(build)/make.inc
 $(build)/liblapack.a: $(build)/make.inc
 	$(MAKE) -C $(build) lapacklib
 
-$(build)/make.inc:
+$(build)/make.inc: $(build)/make.inc.example
 	cp $(build)/make.inc.example $@
+
+$(build)/make.inc.example:
+	git submodule update --init
 
 clean:
 	test -f $(build)/make.inc && $(MAKE) -C $(build) clean
