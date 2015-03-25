@@ -1,5 +1,5 @@
-// Package lapack provides an interface to the Linear Algebra PACKage, which
-// also includes the Basic Linear Algebra Subprograms.
+// Package lapack provides bindings to the Basic Linear Algebra Subprograms
+// (BLAS) and Linear Algebra PACKage (LAPACK).
 //
 // http://www.netlib.org/lapack/
 // http://www.netlib.org/blas/

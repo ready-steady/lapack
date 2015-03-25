@@ -1,7 +1,7 @@
 # LAPACK [![Build Status][travis-img]][travis-url]
 
-The package provides an interface to the [Linear Algebra PACKage][lapack], which
-also includes the [Basic Linear Algebra Subprograms][blas].
+The package provides bindings to the [Basic Linear Algebra Subprograms][blas]
+(BLAS) and [Linear Algebra PACKage][lapack] (LAPACK).
 
 The list of available routines currently includes:
 
