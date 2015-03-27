@@ -25,7 +25,7 @@ $(build)/make.inc.example:
 	git submodule update --init
 
 clean:
-	test -f $(build)/make.inc && $(MAKE) -C $(build) clean
-	rm -rf $(syso) $(build)/$(syso) $(build)/*.a $(build)/INSTALL/test* $(build)/make.inc
+	rm -rf $(syso)
+	cd $(build) && (git checkout . && git clean -df)
 
 .PHONY: all install clean
