@@ -1,31 +1,33 @@
-build := lapack
-syso := main.syso
+root := $(shell pwd)
+source := $(root)/source
+target := $(root)/target
+object := main.syso
 
-all: $(syso)
+all: $(object)
 
-install: $(syso)
+install: $(object)
 	go install
 
-$(syso): $(build)/librefblas.a $(build)/liblapack.a
-	mkdir -p $(build)/$@
-	cd $(build)/$@ && ar x ../librefblas.a
-	cd $(build)/$@ && ar x ../liblapack.a
-	ld -r -o $@ $(build)/$@/*.o
+$(object): $(source)/librefblas.a $(source)/liblapack.a
+	mkdir -p $(target)/$@
+	cd $(target)/$@ && ar x $(source)/librefblas.a
+	cd $(target)/$@ && ar x $(source)/liblapack.a
+	ld -r -o $@ $(target)/$@/*.o
 
-$(build)/librefblas.a: $(build)/make.inc
-	$(MAKE) -C $(build) blaslib
+$(source)/librefblas.a: $(source)/make.inc
+	$(MAKE) -C $(source) blaslib
 
-$(build)/liblapack.a: $(build)/make.inc
-	$(MAKE) -C $(build) lapacklib
+$(source)/liblapack.a: $(source)/make.inc
+	$(MAKE) -C $(source) lapacklib
 
-$(build)/make.inc: $(build)/make.inc.example
-	cp $(build)/make.inc.example $@
+$(source)/make.inc: $(source)/make.inc.example
+	cp $(source)/make.inc.example $@
 
-$(build)/make.inc.example:
+$(source)/make.inc.example:
 	git submodule update --init
 
 clean:
-	rm -rf $(syso)
-	cd $(build) && (git checkout . && git clean -df)
+	rm -rf $(object) $(target)
+	cd $(source) && (git checkout . && git clean -df)
 
 .PHONY: all install clean
