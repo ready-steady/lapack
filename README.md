@@ -34,6 +34,12 @@ make install
 
 This command requires [gfortran][gfortran] to be installed.
 
+## Contributing
+
+1. Fork the project.
+2. Implement your idea.
+3. Open a pull request.
+
 [blas]: http://www.netlib.org/blas/
 [gfortran]: https://gcc.gnu.org/wiki/GFortranBinaries
 [lapack]: http://www.netlib.org/lapack/
