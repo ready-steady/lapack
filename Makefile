@@ -1,33 +1,31 @@
 root := $(shell pwd)
 source := $(root)/source
-target := $(root)/target
-object := main.syso
 
-all: $(object)
+ifeq ($(shell uname -s),Darwin)
+extension := dylib
+else
+extension := so
+endif
 
-install: $(object)
+into := main.syso
+from := libopenblas.$(extension)
+
+all: $(into)
+
+install: $(into)
 	go install
 
-$(object): $(source)/librefblas.a $(source)/liblapack.a
-	mkdir -p $(target)/$@
-	cd $(target)/$@ && ar x $(source)/librefblas.a
-	cd $(target)/$@ && ar x $(source)/liblapack.a
-	ld -r -o $@ $(target)/$@/*.o
+$(into): $(source)/$(from)
+	cp $< $@
 
-$(source)/librefblas.a: $(source)/make.inc
-	$(MAKE) -C $(source) blaslib
+$(source)/$(from): $(source)/Makefile
+	$(MAKE) -C $(source) netlib libs shared
 
-$(source)/liblapack.a: $(source)/make.inc
-	$(MAKE) -C $(source) lapacklib
-
-$(source)/make.inc: $(source)/make.inc.example
-	cp $(source)/make.inc.example $@
-
-$(source)/make.inc.example:
+$(source)/Makefile:
 	git submodule update --init
 
 clean:
-	rm -rf $(object) $(target)
+	rm -f $(into)
 	cd $(source) && (git checkout . && git clean -df)
 
 .PHONY: all install clean
