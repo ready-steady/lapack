@@ -13,6 +13,9 @@ install:
   - make install
 
 script:
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+      export LD_LIBRARY_PATH="$(pwd)/source:${LD_LIBRARY_PATH}";
+    fi
   - go test -v
 
 notifications:
