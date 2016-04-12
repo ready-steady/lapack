@@ -7,25 +7,25 @@ else
 extension := so
 endif
 
-target := main.syso
-library := libopenblas.$(extension)
+clibrary := libopenblas.$(extension)
+glibrary := main.syso
 
-all: $(target)
+all: $(glibrary)
 
-install: $(target)
+install: $(glibrary)
 	go install
 
-$(target): $(source)/$(library)
+$(glibrary): $(source)/$(clibrary)
 	cp $< $@
 
-$(source)/$(library): $(source)/Makefile
+$(source)/$(clibrary): $(source)/Makefile
 	$(MAKE) -C $(source) netlib libs shared
 
 $(source)/Makefile:
 	git submodule update --init
 
 clean:
-	rm -f $(target)
+	rm -f $(glibrary)
 	$(MAKE) -C $(source) clean
 	cd $(source) && (git checkout . && git clean -df)
 
