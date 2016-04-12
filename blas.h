@@ -1,26 +1,24 @@
 #ifndef BLAS_H
 #define BLAS_H
 
-extern void dgemv_(const char *TRANS, const int *M, const int *N,
-	const double *ALPHA, const double *A, const int *LDA, const double *X,
-	const int *INCX, const double *BETA, double *Y, const int *INCY);
+extern void dgemm_(const char *transa, const char *transb, const int *m, const int *n,
+	const int *k, const double *alpha, const double *a, const int *lda, const double *b,
+	const int *ldb, const double *beta, double *c, const int *ldc);
 
-void dgemv(char TRANS, int M, int N, double ALPHA, const double *A,
-	int LDA, const double *X, int INCX, double BETA, double *Y, int INCY) {
+extern void dgemv_(const char *trans, const int *m, const int *n, const double *alpha,
+	const double *a, const int *lda, const double *x, const int *incx, const double *beta,
+	double *y, const int *incy);
 
-	dgemv_(&TRANS, &M, &N, &ALPHA, A, &LDA, X, &INCX, &BETA, Y, &INCY);
+void dgemm(char transa, char transb, int m, int n, int k, double alpha, const double *a,
+	int lda, const double *b, int ldb, double beta, double *c, int ldc) {
+
+	dgemm_(&transa, &transb, &m, &n, &k, &alpha, a, &lda, b, &ldb, &beta, c, &ldc);
 }
 
-extern void dgemm_(const char *TRANSA, const char *TRANSB, const int *M,
-	const int *N, const int *K, const double *ALPHA, const double *A,
-	const int *LDA, const double *B, const int *LDB, const double *BETA,
-	double *C, const int *LDC);
+void dgemv(char trans, int m, int n, double alpha, const double *a, int lda, const double *x,
+	int incx, double beta, double *y, int incy) {
 
-void dgemm(char TRANSA, char TRANSB, int M, int N, int K, double ALPHA,
-	const double *A, int LDA, const double *B, int LDB, double BETA,
-	double *C, int LDC) {
-
-	dgemm_(&TRANSA, &TRANSB, &M, &N, &K, &ALPHA, A, &LDA, B, &LDB, &BETA, C, &LDC);
+	dgemv_(&trans, &m, &n, &alpha, a, &lda, x, &incx, &beta, y, &incy);
 }
 
 #endif

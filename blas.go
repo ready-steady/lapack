@@ -4,40 +4,19 @@ package lapack
 // #include "blas.h"
 import "C"
 
-// DGEMV performs one of the matrix-vector operations
-//
-//     Y := ALPHA * A * X + BETA * Y or
-//     Y := ALPHA * A**T * X + BETA * Y
-//
-// where ALPHA and BETA are scalars, X and Y are vectors, and A is an M-by-N
-// matrix.
-//
 // http://www.netlib.org/lapack/explore-html/dc/da8/dgemv_8f.html
-func DGEMV(TRANS byte, M, N int, ALPHA float64, A []float64, LDA int,
-	X []float64, INCX int, BETA float64, Y []float64, INCY int) {
+func DGEMV(trans byte, m, n int, alpha float64, a []float64, lda int, x []float64, incx int,
+	beta float64, y []float64, incy int) {
 
-	C.dgemv(C.char(TRANS), C.int(M), C.int(N), C.double(ALPHA),
-		(*C.double)(&A[0]), C.int(LDA), (*C.double)(&X[0]), C.int(INCX),
-		C.double(BETA), (*C.double)(&Y[0]), C.int(INCY))
+	C.dgemv(C.char(trans), C.int(m), C.int(n), C.double(alpha), (*C.double)(&a[0]), C.int(lda),
+		(*C.double)(&x[0]), C.int(incx), C.double(beta), (*C.double)(&y[0]), C.int(incy))
 }
 
-// DGEMM performs one of the matrix-matrix operations
-//
-//     C := ALPHA * op(A) * op(B) + BETA * C
-//
-// where op(X) is one of
-//
-//     op(X) = X or
-//     op(X) = X**T,
-//
-// ALPHA and BETA are scalars, and A, B, and C are matrices, with op(A)
-// an M-by-K matrix, op(B) a K-by-N matrix, and C an M-by-N matrix.
-//
 // http://www.netlib.org/lapack/explore-html/d7/d2b/dgemm_8f.html
-func DGEMM(TRANSA, TRANSB byte, M, N, K int, ALPHA float64, A []float64,
-	LDA int, B []float64, LDB int, BETA float64, C []float64, LDC int) {
+func DGEMM(transa, transb byte, m, n, k int, alpha float64, a []float64, lda int, b []float64,
+	ldb int, beta float64, C []float64, ldc int) {
 
-	C.dgemm(C.char(TRANSA), C.char(TRANSB), C.int(M), C.int(N), C.int(K),
-		C.double(ALPHA), (*C.double)(&A[0]), C.int(LDA), (*C.double)(&B[0]),
-		C.int(LDB), C.double(BETA), (*C.double)(&C[0]), C.int(LDC))
+	C.dgemm(C.char(transa), C.char(transb), C.int(m), C.int(n), C.int(k), C.double(alpha),
+		(*C.double)(&a[0]), C.int(lda), (*C.double)(&b[0]), C.int(ldb), C.double(beta),
+		(*C.double)(&C[0]), C.int(ldc))
 }

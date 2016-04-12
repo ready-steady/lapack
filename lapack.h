@@ -1,23 +1,20 @@
 #ifndef LAPACK_H
 #define LAPACK_H
 
-extern void dgtsv_(const int *N, const int *NRHS, const double *DL,
-	double *D, double *DU, double *B, int *LDB, int *INFO);
+extern void dgtsv_(const int *n, const int *nrhs, const double *dl, double *d, double *du,
+	double *b, int *ldb, int *info);
 
-void dgtsv(int N, int NRHS, double *DL, double *D, double *DU, double *B,
-	int LDB, int *INFO) {
+extern void dsyev_(const char *jobz, const char *uplo, const int *n, double *a, const int *lda,
+	double *w, double *work, const int *lwork, int *info);
 
-	dgtsv_(&N, &NRHS, DL, D, DU, B, &LDB, INFO);
+void dgtsv(int n, int nrhs, double *dl, double *d, double *du, double *b, int ldb, int *info) {
+	dgtsv_(&n, &nrhs, dl, d, du, b, &ldb, info);
 }
 
-extern void dsyev_(const char *JOBZ, const char *UPLO, const int *N,
-	double *A, const int *LDA, double *W, double *WORK, const int *LWORK,
-	int *INFO);
+void dsyev(char jobz, char uplo, int n, double *a, int lda, double *w, double *work, int lwork,
+	int *info) {
 
-void dsyev(char JOBZ, char UPLO, int N, double *A, int LDA, double *W,
-	double *WORK, int LWORK, int *INFO) {
-
-	dsyev_(&JOBZ, &UPLO, &N, A, &LDA, W, WORK, &LWORK, INFO);
+	dsyev_(&jobz, &uplo, &n, a, &lda, w, work, &lwork, info);
 }
 
 #endif
