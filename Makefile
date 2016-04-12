@@ -19,7 +19,7 @@ $(glibrary): $(source)/$(clibrary)
 	cp $< $@
 
 $(source)/$(clibrary): $(source)/Makefile
-	$(MAKE) -C $(source) netlib libs shared
+	$(MAKE) -C $(source) NO_CBLAS=1 netlib libs shared
 
 $(source)/Makefile:
 	git submodule update --init
