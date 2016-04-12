@@ -6,8 +6,7 @@ os:
   - osx
 
 before_install:
-  - curl -O https://ready-steady.github.io/travis/install-gfortran.sh
-  - source install-gfortran.sh
+  - curl -O https://ready-steady.github.io/travis/gfortran.sh && source gfortran.sh
 
 install:
   - go get -d -t ./...
