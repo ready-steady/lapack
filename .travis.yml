@@ -6,18 +6,14 @@ os:
   - osx
 
 before_install:
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-      export CGO_LDFLAGS="-L$(dirname $(find $(brew --prefix) -name libgfortran.dylib | grep -v i386))";
-      echo $CGO_LDFLAGS;
-    fi
+  - curl https://ready-steady.github.io/travis/install_gfortran.sh | bash
+  - echo $CGO_LDFLAGS;
 
 install:
-  - echo $CGO_LDFLAGS
   - go get -d -t ./...
   - make install
 
 script:
-  - echo $CGO_LDFLAGS
   - go test -v
 
 notifications:
