@@ -1,10 +1,9 @@
 language: go
 sudo: false
 
-addons:
-  apt:
-    packages:
-      - gfortran
+os:
+  - linux
+  - osx
 
 install:
   - go get -d -t ./...
@@ -13,3 +12,8 @@ install:
 
 notifications:
   email: false
+
+addons:
+  apt:
+    packages:
+      - gfortran
