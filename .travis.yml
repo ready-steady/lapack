@@ -6,8 +6,9 @@ os:
   - osx
 
 before_install:
-  - curl https://ready-steady.github.io/travis/install_gfortran.sh | bash
-  - echo $CGO_LDFLAGS;
+  - curl -O https://ready-steady.github.io/travis/install_gfortran.sh
+  - source install_gfortran.sh
+  - echo $CGO_LDFLAGS
 
 install:
   - go get -d -t ./...
