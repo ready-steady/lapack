@@ -5,6 +5,8 @@ target := $(root)/target
 clibrary := libopenblas.a
 glibrary := main.syso
 
+letters := b c d g i l m o p q s x z
+
 all: $(glibrary)
 
 install: $(glibrary)
@@ -13,8 +15,10 @@ install: $(glibrary)
 $(glibrary): $(target)/opt/OpenBLAS/lib/$(clibrary)
 	mkdir -p $(target)/$@
 	cd $(target)/$@ && ar x $<
-	find $(target) -name *.o > $(target)/objects.txt
-	ld -r -filelist $(target)/objects.txt -o $@
+	for letter in $(letters); do \
+		ld -r $(target)/$@/$$letter*.o -o $(target)/$$letter.syso; \
+	done
+	ld -r $(patsubst %,$(target)/%.syso,$(letters)) -o $@
 
 $(target)/opt/OpenBLAS/lib/$(clibrary): $(source)/Makefile
 	$(MAKE) -C $(source) NO_CBLAS=1 netlib libs shared
