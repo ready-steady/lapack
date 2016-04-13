@@ -18,11 +18,11 @@ $(glibrary): $(target)/opt/OpenBLAS/lib/$(clibrary)
 			ld -r $(target)/objects/$$letter*.o -o $(target)/$$letter.syso; \
 		fi; \
 	done
-	ld -r $$(find $(target) -name *.syso) -o $@
+	ld -r $(target)/*.syso -o $@
 
 $(target)/opt/OpenBLAS/lib/$(clibrary): $(source)/Makefile
 	$(MAKE) -C $(source) NO_CBLAS=1 netlib libs shared
-	$(MAKE) -C $(source) DESTDIR=$(target) install
+	$(MAKE) -C $(source) "DESTDIR=$(target)" install
 
 $(source)/Makefile:
 	git submodule update --init
