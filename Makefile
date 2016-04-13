@@ -19,14 +19,14 @@ $(glibrary): $(source)/$(clibrary)
 	cp $< $@
 
 $(source)/$(clibrary): $(source)/Makefile
-	$(MAKE) -C $(source) NO_CBLAS=1 netlib libs shared &> /dev/null
+	$(MAKE) -C $(source) NO_CBLAS=1 netlib libs shared
 
 $(source)/Makefile:
 	git submodule update --init
 
 clean:
 	rm -f $(glibrary)
-	$(MAKE) -C $(source) clean &> /dev/null
+	$(MAKE) -C $(source) clean
 	cd $(source) && (git checkout . && git clean -df)
 
 .PHONY: all install clean
