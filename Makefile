@@ -1,13 +1,8 @@
 root := $(shell pwd)
 source := $(root)/source
+target := $(root)/target
 
-ifeq ($(shell uname -s),Darwin)
-extension := dylib
-else
-extension := so
-endif
-
-clibrary := libopenblas.$(extension)
+clibrary := libopenblas.a
 glibrary := main.syso
 
 all: $(glibrary)
@@ -15,11 +10,15 @@ all: $(glibrary)
 install: $(glibrary)
 	go install
 
-$(glibrary): $(source)/$(clibrary)
-	cp $< $@
+$(glibrary): $(target)/opt/OpenBLAS/lib/$(clibrary)
+	mkdir -p $(target)/$@
+	cd $(target)/$@ && ar x $<
+	find $(target) -name *.o > $(target)/objects.txt
+	ld -r -filelist $(target)/objects.txt -o $@
 
-$(source)/$(clibrary): $(source)/Makefile
-	$(MAKE) -C $(source) NO_CBLAS=1 netlib libs shared
+$(target)/opt/OpenBLAS/lib/$(clibrary): $(source)/Makefile
+	$(MAKE) -C $(source) NO_CBLAS=1 netlib libs
+	$(MAKE) -C $(source) DESTDIR=$(target) install
 
 $(source)/Makefile:
 	git submodule update --init
