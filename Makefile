@@ -17,7 +17,7 @@ $(glibrary): $(target)/opt/OpenBLAS/lib/$(clibrary)
 	ld -r -filelist $(target)/objects.txt -o $@
 
 $(target)/opt/OpenBLAS/lib/$(clibrary): $(source)/Makefile
-	$(MAKE) -C $(source) NO_CBLAS=1 netlib libs
+	$(MAKE) -C $(source) NO_CBLAS=1 netlib libs shared
 	$(MAKE) -C $(source) DESTDIR=$(target) install
 
 $(source)/Makefile:
