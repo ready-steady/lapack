@@ -22,7 +22,7 @@ $(glibrary): $(target)/opt/OpenBLAS/lib/$(clibrary)
 
 $(target)/opt/OpenBLAS/lib/$(clibrary): $(source)/Makefile
 	$(MAKE) -C $(source) NO_CBLAS=1 netlib libs shared
-	$(MAKE) -C $(source) "DESTDIR=$(target)" install
+	$(MAKE) -C $(source) DESTDIR=$(target) install
 
 $(source)/Makefile:
 	git submodule update --init
