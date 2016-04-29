@@ -22,6 +22,30 @@ func BenchmarkDSYEV(bench *testing.B) {
 	}
 }
 
+func TestDGETRI(t *testing.T) {
+	n := 3
+	a := []float64{1, -1, 0, 0, 5, 3, 2, 0, -9}
+	ipiv := make([]int, n+1)
+	info := 0
+
+	DGETRF(n, n, a, n, ipiv, &info)
+	assert.Equal(info, 0, t)
+
+	lwork := n * n
+	work := make([]float64, lwork)
+
+	DGETRI(n, a, n, ipiv, work, lwork, &info)
+	assert.Equal(info, 0, t)
+
+	expectedA := []float64{
+		+8.823529411764706e-01, +1.764705882352941e-01, +5.882352941176472e-02,
+		-1.176470588235294e-01, +1.764705882352941e-01, +5.882352941176472e-02,
+		+1.960784313725490e-01, +3.921568627450981e-02, -9.803921568627452e-02,
+	}
+
+	assert.EqualWithin(a, expectedA, 1e-15, t)
+}
+
 func TestDGTSV(t *testing.T) {
 	n := 10
 	nrhs := 2
@@ -55,7 +79,6 @@ func TestDGTSV(t *testing.T) {
 	info := 0
 
 	DGTSV(n, nrhs, dl, d, du, b, n, &info)
-
 	assert.Equal(info, 0, t)
 
 	expectedB := []float64{
@@ -92,12 +115,12 @@ func TestDSYEV(t *testing.T) {
 	info := 0
 
 	DSYEV('V', 'U', n, a, n, w, work, lwork, &info)
+	assert.Equal(info, 0, t)
 
 	lwork = int(work[0])
 	work = make([]float64, lwork)
 
 	DSYEV('V', 'U', n, a, n, w, work, lwork, &info)
-
 	assert.Equal(info, 0, t)
 
 	expectedA := []float64{
