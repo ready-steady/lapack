@@ -7,27 +7,42 @@ import (
 	"github.com/ready-steady/fixture"
 )
 
-func TestDGTSV(t *testing.T) {
-	N := 10
-	NRHS := 2
+func BenchmarkDSYEV(bench *testing.B) {
+	n := 1000
+	a := fixture.MakeSymmetricMatrix(uint(n))
+	w := make([]float64, n)
+	lwork := 4 * n
+	work := make([]float64, lwork)
+	info := 0
 
-	DL := []float64{
+	bench.ResetTimer()
+
+	for i := 0; i < bench.N; i++ {
+		DSYEV('V', 'U', n, a, n, w, work, lwork, &info)
+	}
+}
+
+func TestDGTSV(t *testing.T) {
+	n := 10
+	nrhs := 2
+
+	dl := []float64{
 		4.1702200470257400e-01, 7.2032449344215810e-01, 1.1437481734488664e-04,
 		3.0233257263183977e-01, 1.4675589081711304e-01, 9.2338594768797799e-02,
 		1.8626021137767090e-01, 3.4556072704304774e-01, 3.9676747423066994e-01,
 	}
-	D := []float64{
+	d := []float64{
 		1.4191945144032947e+00, 1.6852195003967596e+00, 1.2044522497315175e+00,
 		1.8781174363909454e+00, 1.0273875931979262e+00, 1.6704675101784021e+00,
 		1.4173048023671271e+00, 1.5586898284457518e+00, 1.1403869385952339e+00,
 		1.1981014890848787e+00,
 	}
-	DU := []float64{
+	du := []float64{
 		9.6826157571939753e-01, 3.1342417815924284e-01, 6.9232261566931408e-01,
 		8.7638915229603831e-01, 8.9460666350384732e-01, 8.5044211369777911e-02,
 		3.9054783232882362e-02, 1.6983041956456890e-01, 8.7814250342941313e-01,
 	}
-	B := []float64{
+	b := []float64{
 		9.8886108890649471e-01, 7.4816565437983940e-01, 2.8044399206440518e-01,
 		7.8927932845148852e-01, 1.0322600657764203e-01, 4.4789352617590517e-01,
 		9.0859550309309556e-01, 2.9361414837367950e-01, 2.8777533858634874e-01,
@@ -37,11 +52,11 @@ func TestDGTSV(t *testing.T) {
 		5.8930553690328424e-01, 6.9975836002093117e-01,
 	}
 
-	INFO := 0
+	info := 0
 
-	DGTSV(N, NRHS, DL, D, DU, B, N, &INFO)
+	DGTSV(n, nrhs, dl, d, du, b, n, &info)
 
-	assert.Equal(INFO, 0, t)
+	assert.Equal(info, 0, t)
 
 	expectedB := []float64{
 		+4.2413660994635355e-01, +3.9961178716148082e-01, -3.2589132682920774e-01,
@@ -53,13 +68,13 @@ func TestDGTSV(t *testing.T) {
 		+7.4728631269099247e-02, +5.5930860268891813e-01,
 	}
 
-	assert.EqualWithin(B, expectedB, 1e-15, t)
+	assert.EqualWithin(b, expectedB, 1e-15, t)
 }
 
 func TestDSYEV(t *testing.T) {
-	N := 5
+	n := 5
 
-	A := []float64{
+	a := []float64{
 		0.162182308193243, 0.601981941401637, 0.450541598502498,
 		0.825816977489547, 0.106652770180584, 0.601981941401637,
 		0.262971284540144, 0.083821377996933, 0.538342435260057,
@@ -71,19 +86,19 @@ func TestDSYEV(t *testing.T) {
 		0.817303220653433,
 	}
 
-	W := make([]float64, N)
-	WORK := []float64{0}
-	LWORK := -1
-	INFO := 0
+	w := make([]float64, n)
+	work := []float64{0}
+	lwork := -1
+	info := 0
 
-	DSYEV('V', 'U', N, A, N, W, WORK, LWORK, &INFO)
+	DSYEV('V', 'U', n, a, n, w, work, lwork, &info)
 
-	LWORK = int(WORK[0])
-	WORK = make([]float64, LWORK)
+	lwork = int(work[0])
+	work = make([]float64, lwork)
 
-	DSYEV('V', 'U', N, A, N, W, WORK, LWORK, &INFO)
+	DSYEV('V', 'U', n, a, n, w, work, lwork, &info)
 
-	assert.Equal(INFO, 0, t)
+	assert.Equal(info, 0, t)
 
 	expectedA := []float64{
 		-0.350512137830478, +0.116468084895727, -0.435005782872646,
@@ -102,21 +117,6 @@ func TestDSYEV(t *testing.T) {
 		+0.892450858666551, +2.529798046292787,
 	}
 
-	assert.EqualWithin(A, expectedA, 2e-15, t)
-	assert.EqualWithin(W, expectedW, 2e-15, t)
-}
-
-func BenchmarkDSYEV(b *testing.B) {
-	N := 1000
-	A := fixture.MakeSymmetricMatrix(uint(N))
-	W := make([]float64, N)
-	LWORK := 4 * N
-	WORK := make([]float64, LWORK)
-	INFO := 0
-
-	b.ResetTimer()
-
-	for i := 0; i < b.N; i++ {
-		DSYEV('V', 'U', N, A, N, W, WORK, LWORK, &INFO)
-	}
+	assert.EqualWithin(a, expectedA, 2e-15, t)
+	assert.EqualWithin(w, expectedW, 2e-15, t)
 }

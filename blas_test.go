@@ -6,57 +6,57 @@ import (
 	"github.com/ready-steady/assert"
 )
 
-func TestDGEMV(t *testing.T) {
-	M, N := 2, 3
+func BenchmarkDGEMM(bench *testing.B) {
+	m := 1000
+	a, b, c := ones(m*m), ones(m*m), ones(m*m)
 
-	A := []float64{1, 4, 2, 5, 3, 6}
-	X := []float64{1, 2, 3}
-	Y := []float64{6, 8}
-
-	DGEMV('N', M, N, 1, A, M, X, 1, 1, Y, 1)
-
-	assert.Equal(Y, []float64{20, 40}, t)
-}
-
-func TestDGEMM(t *testing.T) {
-	M, N, K := 2, 4, 3
-
-	A := []float64{1, 4, 2, 5, 3, 6}
-	B := []float64{1, 5, 9, 2, 6, 10, 3, 7, 11, 4, 8, 12}
-	C := []float64{2, 7, 6, 2, 0, 7, 4, 2}
-
-	DGEMM('N', 'N', M, N, K, 1, A, M, B, K, 1, C, M)
-
-	assert.Equal(C, []float64{40, 90, 50, 100, 50, 120, 60, 130}, t)
-}
-
-func BenchmarkDGEMVFewLarge(b *testing.B) {
-	M := 1000
-	A, X, Y := ones(M*M), ones(M*1), ones(M*1)
-
-	for i := 0; i < b.N; i++ {
-		DGEMV('N', M, M, 1, A, M, X, 1, 1, Y, 1)
+	for i := 0; i < bench.N; i++ {
+		DGEMM('N', 'N', m, m, m, 1, a, m, b, m, 1, c, m)
 	}
 }
 
-func BenchmarkDGEMVManySmall(b *testing.B) {
-	M := 20
-	A, X, Y := ones(M*M), ones(M*1), ones(M*1)
+func BenchmarkDGEMVFewLarge(bench *testing.B) {
+	m := 1000
+	a, x, y := ones(m*m), ones(m*1), ones(m*1)
 
-	for i := 0; i < b.N; i++ {
+	for i := 0; i < bench.N; i++ {
+		DGEMV('N', m, m, 1, a, m, x, 1, 1, y, 1)
+	}
+}
+
+func BenchmarkDGEMVManySmall(bench *testing.B) {
+	m := 20
+	a, x, y := ones(m*m), ones(m*1), ones(m*1)
+
+	for i := 0; i < bench.N; i++ {
 		for j := 0; j < 20000; j++ {
-			DGEMV('N', M, M, 1, A, M, X, 1, 1, Y, 1)
+			DGEMV('N', m, m, 1, a, m, x, 1, 1, y, 1)
 		}
 	}
 }
 
-func BenchmarkDGEMM(b *testing.B) {
-	M := 1000
-	A, B, C := ones(M*M), ones(M*M), ones(M*M)
+func TestDGEMV(t *testing.T) {
+	m, n := 2, 3
 
-	for i := 0; i < b.N; i++ {
-		DGEMM('N', 'N', M, M, M, 1, A, M, B, M, 1, C, M)
-	}
+	a := []float64{1, 4, 2, 5, 3, 6}
+	x := []float64{1, 2, 3}
+	y := []float64{6, 8}
+
+	DGEMV('N', m, n, 1, a, m, x, 1, 1, y, 1)
+
+	assert.Equal(y, []float64{20, 40}, t)
+}
+
+func TestDGEMM(t *testing.T) {
+	m, n, k := 2, 4, 3
+
+	a := []float64{1, 4, 2, 5, 3, 6}
+	b := []float64{1, 5, 9, 2, 6, 10, 3, 7, 11, 4, 8, 12}
+	c := []float64{2, 7, 6, 2, 0, 7, 4, 2}
+
+	DGEMM('N', 'N', m, n, k, 1, a, m, b, k, 1, c, m)
+
+	assert.Equal(c, []float64{40, 90, 50, 100, 50, 120, 60, 130}, t)
 }
 
 func ones(size int) []float64 {
