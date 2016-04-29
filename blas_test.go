@@ -35,18 +35,6 @@ func BenchmarkDGEMVManySmall(bench *testing.B) {
 	}
 }
 
-func TestDGEMV(t *testing.T) {
-	m, n := 2, 3
-
-	a := []float64{1, 4, 2, 5, 3, 6}
-	x := []float64{1, 2, 3}
-	y := []float64{6, 8}
-
-	DGEMV('N', m, n, 1, a, m, x, 1, 1, y, 1)
-
-	assert.Equal(y, []float64{20, 40}, t)
-}
-
 func TestDGEMM(t *testing.T) {
 	m, n, k := 2, 4, 3
 
@@ -57,6 +45,18 @@ func TestDGEMM(t *testing.T) {
 	DGEMM('N', 'N', m, n, k, 1, a, m, b, k, 1, c, m)
 
 	assert.Equal(c, []float64{40, 90, 50, 100, 50, 120, 60, 130}, t)
+}
+
+func TestDGEMV(t *testing.T) {
+	m, n := 2, 3
+
+	a := []float64{1, 4, 2, 5, 3, 6}
+	x := []float64{1, 2, 3}
+	y := []float64{6, 8}
+
+	DGEMV('N', m, n, 1, a, m, x, 1, 1, y, 1)
+
+	assert.Equal(y, []float64{20, 40}, t)
 }
 
 func ones(size int) []float64 {

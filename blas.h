@@ -14,7 +14,8 @@ void dgemm(char transa, char transb, int m, int n, int k, double alpha,
 	const double *a, int lda, const double *b, int ldb, double beta, double *c,
 	int ldc) {
 
-	dgemm_(&transa, &transb, &m, &n, &k, &alpha, a, &lda, b, &ldb, &beta, c, &ldc);
+	dgemm_(&transa, &transb, &m, &n, &k, &alpha, a, &lda, b, &ldb, &beta, c,
+		&ldc);
 }
 
 void dgemv(char trans, int m, int n, double alpha, const double *a, int lda,
