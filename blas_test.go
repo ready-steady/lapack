@@ -35,6 +35,14 @@ func BenchmarkDGEMVManySmall(bench *testing.B) {
 	}
 }
 
+func TestDDOT(t *testing.T) {
+	n := 3
+
+	dot := DDOT(n, []float64{1.0, 2.0, 3.0}, 1, []float64{3.0, 2.0, 1.0}, 1)
+
+	assert.Equal(dot, 10.0, t)
+}
+
 func TestDGEMM(t *testing.T) {
 	m, n, k := 2, 4, 3
 

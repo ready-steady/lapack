@@ -5,6 +5,7 @@ and [Linear Algebra Package][lapack].
 
 The list of available routines currently includes:
 
+* DDOT,
 * DGEMM,
 * DGEMV,
 * DGETRF,

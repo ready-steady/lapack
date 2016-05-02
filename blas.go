@@ -4,6 +4,11 @@ package lapack
 // #include "blas.h"
 import "C"
 
+func DDOT(n int, x []float64, incx int, y []float64, incy int) float64 {
+	return float64(C.ddot(C.int(n), (*C.double)(&x[0]), C.int(incx),
+		(*C.double)(&y[0]), C.int(incy)))
+}
+
 func DGEMM(transa, transb byte, m, n, k int, alpha float64, a []float64,
 	lda int, b []float64, ldb int, beta float64, C []float64, ldc int) {
 
