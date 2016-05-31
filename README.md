@@ -37,7 +37,7 @@ make install
 
 This command requires [gfortran][gfortran] to be installed.
 
-## Contributing
+## Contribution
 
 1. Fork the project.
 2. Implement your idea.
