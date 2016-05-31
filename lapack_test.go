@@ -7,6 +7,10 @@ import (
 	"github.com/ready-steady/fixture"
 )
 
+func init() {
+	SetNumberOfThreads(1)
+}
+
 func BenchmarkDSYEV(bench *testing.B) {
 	n := 1000
 	a := fixture.MakeSymmetricMatrix(uint(n))

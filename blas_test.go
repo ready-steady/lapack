@@ -6,6 +6,10 @@ import (
 	"github.com/ready-steady/assert"
 )
 
+func init() {
+	SetNumberOfThreads(1)
+}
+
 func BenchmarkDGEMM(bench *testing.B) {
 	m := 1000
 	a, b, c := ones(m*m), ones(m*m), ones(m*m)
