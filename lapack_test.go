@@ -47,7 +47,7 @@ func TestDGETRI(t *testing.T) {
 		+1.960784313725490e-01, +3.921568627450981e-02, -9.803921568627452e-02,
 	}
 
-	assert.EqualWithin(a, expectedA, 1e-15, t)
+	assert.Close(a, expectedA, 1e-15, t)
 }
 
 func TestDGTSV(t *testing.T) {
@@ -95,7 +95,7 @@ func TestDGTSV(t *testing.T) {
 		+7.4728631269099247e-02, +5.5930860268891813e-01,
 	}
 
-	assert.EqualWithin(b, expectedB, 1e-15, t)
+	assert.Close(b, expectedB, 1e-15, t)
 }
 
 func TestDSYEV(t *testing.T) {
@@ -144,6 +144,6 @@ func TestDSYEV(t *testing.T) {
 		+0.892450858666551, +2.529798046292787,
 	}
 
-	assert.EqualWithin(a, expectedA, 2e-15, t)
-	assert.EqualWithin(w, expectedW, 2e-15, t)
+	assert.Close(a, expectedA, 2e-15, t)
+	assert.Close(w, expectedW, 2e-15, t)
 }
