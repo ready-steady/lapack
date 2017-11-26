@@ -1,12 +1,11 @@
 language: go
-sudo: false
 
 os:
   - linux
   - osx
 
 before_install:
-  - curl -O https://ready-steady.github.io/travis/gfortran.sh && source gfortran.sh
+  - curl https://ready-steady.github.io/travis/fortran.sh | bash
 
 install:
   - go get -d -t ./...
@@ -15,10 +14,10 @@ install:
 script:
   - go test -v
 
-notifications:
-  email: false
-
 addons:
   apt:
     packages:
       - gfortran
+
+notifications:
+  email: false
